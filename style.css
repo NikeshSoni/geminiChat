@@ -132,9 +132,22 @@ body {
     align-self: flex-start;
 }
 
+.chat-list .message.loading .avatar{
+    animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
 .chat-list .message .text {
     color: #E3E3E3;
 }
+.chat-list .message.loading .text{
+    display: none;
+} 
 
 .chat-list .message .icon {
     height: 35px;
@@ -150,8 +163,38 @@ body {
     visibility: hidden;
 }
 
-.chat-list .message:hover .icon{
+.chat-list .message:not(.loading):hover .icon {
     visibility: visible;
+}
+
+.chat-list .loading-indicator {
+    width: 100%;
+    display: flex;
+    gap: .8rem;
+    flex-direction: column;
+}
+
+.chat-list .loading-indicator .loading-bar {
+    height: 11px;
+    width: 100%;
+    background: linear-gradient(to right, #4285f4, #242424, #4285f4);
+    animation: animate 3s linear infinite;
+    border-radius: .14rem;
+
+}
+
+.chat-list .loading-indicator .loading-bar:last-child{
+    width: 70%;
+
+}
+
+@keyframes animate {
+    0%{
+        background-position: -800px 0;
+    }
+    100%{
+        background-position: 800px 0;
+    }
 }
 
 .chat-list .message .icon:hover {
