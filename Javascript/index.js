@@ -2,6 +2,9 @@ const typingForm = document.querySelector(".typing-form");
 const chatList = document.querySelector(".chat-list");
 
 let userMessage = null;
+const API_KEY = "AIzaSyCAd-jOTmZTLecRUcvqSEXAegaWstf4Czw";
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=
+${API_KEY}`;
 
 //  create a new message element and return it..
 
@@ -11,6 +14,35 @@ const createMessageElement = (content, ...classes) => {
     divTag.innerHTML = content;
 
     return divTag
+}
+
+
+// Get Api and responce 
+const generateAPIResponce = async (incoingMessageDiv) => {
+
+    const textElement = incoingMessageDiv.querySelector(".text") // get text Element 
+
+    //  Send a Post Method 
+    try {
+        const responce = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                contents: [{
+                    role: "user",
+                    parts: [{ text: userMessage }]
+                }]
+            })
+        })
+
+        const data = await responce.json();
+        const apiResponce =  data?.candidates[0].content.parts[0].text;
+        textElement.innerText = apiResponce  
+    } catch (error) {
+        console.log(error);
+    }finally {
+        incoingMessageDiv.classList.remove("loading")
+    }
 }
 
 //  show animation when api send  the Responce 
@@ -30,6 +62,9 @@ const showLoadingAnimation = () => {
 
     const incoingMessageDiv = createMessageElement(htmlCode, "outgoing", "loading");
     chatList.appendChild(incoingMessageDiv);
+
+    generateAPIResponce(incoingMessageDiv);
+
 }
 
 const handleOutgoingChat = () => {

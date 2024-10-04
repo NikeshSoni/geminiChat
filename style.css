@@ -169,9 +169,13 @@ body {
 
 .chat-list .loading-indicator {
     width: 100%;
-    display: flex;
+    display: none;
     gap: .8rem;
     flex-direction: column;
+}
+
+.chat-list .message.loading .loading-indicator{
+    display: flex;
 }
 
 .chat-list .loading-indicator .loading-bar {
