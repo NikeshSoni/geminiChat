@@ -16,6 +16,21 @@ const createMessageElement = (content, ...classes) => {
     return divTag
 }
 
+//  Show Typing Effect 
+const showTypingEffect = (text, textElement) => {
+    const words = text.split(' ');
+    let currentWordIndex = 0;
+
+    const typingInterval = setInterval(() => {
+        textElement.innerText += (currentWordIndex === 0 ? '' : ' ') + words[currentWordIndex++]
+
+        if (currentWordIndex === words.length) {
+            clearInterval(typingInterval)
+        }
+    }, 75)
+
+}
+
 
 // Get Api and responce 
 const generateAPIResponce = async (incoingMessageDiv) => {
@@ -26,7 +41,7 @@ const generateAPIResponce = async (incoingMessageDiv) => {
     try {
         const responce = await fetch(API_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 contents: [{
                     role: "user",
@@ -36,11 +51,12 @@ const generateAPIResponce = async (incoingMessageDiv) => {
         })
 
         const data = await responce.json();
-        const apiResponce =  data?.candidates[0].content.parts[0].text;
-        textElement.innerText = apiResponce  
+        const apiResponce = data?.candidates[0].content.parts[0].text;
+        // textElement.innerText = apiResponce  
+        showTypingEffect(apiResponce, textElement)
     } catch (error) {
         console.log(error);
-    }finally {
+    } finally {
         incoingMessageDiv.classList.remove("loading")
     }
 }
