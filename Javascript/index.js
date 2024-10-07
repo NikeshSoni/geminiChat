@@ -73,15 +73,31 @@ const showLoadingAnimation = () => {
                     <div class="loading-bar"></div>
                 </div>
             </div>
-            <span class="icon material-symbols-rounded">content_copy</span>
+            <span onclick="copyMessage(this)" class="icon material-symbols-rounded">content_copy</span>
     `;
 
     const incoingMessageDiv = createMessageElement(htmlCode, "outgoing", "loading");
     chatList.appendChild(incoingMessageDiv);
 
     generateAPIResponce(incoingMessageDiv);
-
 }
+
+
+ const copyMessage = (copyIcon) => {
+    console.log(copyIcon);
+
+    // const messageText = copyIcon.parentElement.querySelector(".text").innerText;
+    const messageText =  copyIcon.parentElement.querySelector(".text").innerText;
+
+    console.log(messageText);
+    
+
+    navigator.clipboard.writeText(messageText);
+    copyIcon.innerText = "done";
+
+    setTimeout( () => copyIcon.innerText = "content_copy", 1000)
+     
+ }
 
 const handleOutgoingChat = () => {
     userMessage = typingForm.querySelector(".typing-input").value.trim()
